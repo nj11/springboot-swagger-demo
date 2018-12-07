@@ -35,14 +35,19 @@ Sample Response (JSON)
 ```
 
 ### Screenshots
-Step 1 :Signup a user: 
-![image](https://user-images.githubusercontent.com/17017086/49659150-26f46280-fa09-11e8-8d4d-b1da5577c83a.png)
+Step 1 :User signup with Postman
 
-Step2 :Login with user created in Step1.Copy the access token in response.
-![image](https://user-images.githubusercontent.com/17017086/49659023-ef85b600-fa08-11e8-8596-af788c0293cb.png)
+![image](https://user-images.githubusercontent.com/17017086/49659707-6a9b9c00-fa0a-11e8-9159-827acff233f6.png)
 
-Step3 :Navigate to http://localhost:8080/swagger-ui.html and select authorize button and enter access token as below
+Step 2 :User Login with Postman.Copy the token generated on successful login
 
-Step 4:Now execute API using swagger.
+![image](https://user-images.githubusercontent.com/17017086/49659720-712a1380-fa0a-11e8-8436-de4500014138.png)
 
-![image](https://user-images.githubusercontent.com/17017086/49542869-4ae66580-f89c-11e8-9c44-cb0e48f2d033.png)
+Step 3 :On Swagger UI ( http://localhost:8080/springboot-swagger-demo/swagger-ui.html ) click authorize and paste token from Step 2
+
+![image](https://user-images.githubusercontent.com/17017086/49659738-7f782f80-fa0a-11e8-8ca2-c8f2f8c92913.png)
+
+Step 4:Execute the API.Note the bearer token added in authorization header in generated curl
+
+![image](https://user-images.githubusercontent.com/17017086/49659730-78e9b800-fa0a-11e8-8086-540cf4c8655c.png)
+
