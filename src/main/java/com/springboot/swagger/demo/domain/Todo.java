@@ -9,7 +9,6 @@ import java.util.Date;
 public class Todo implements Serializable {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private boolean isCompleted;

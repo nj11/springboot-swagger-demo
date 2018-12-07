@@ -2,10 +2,7 @@ package com.springboot.swagger.demo.controllers;
 
 import com.springboot.swagger.demo.domain.Todo;
 import com.springboot.swagger.demo.services.TodoService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/todo")
+@RequestMapping("/v1/")
 @Api(value="Sample REST operations on todo objects")
 
 public class TodoController {
@@ -27,7 +24,7 @@ public class TodoController {
         this.todoService = todoService;
     }
 
-    @ApiOperation(value = "Search all todos")
+    @ApiOperation(value = "Search all todos"    )
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully completed request"),
             @ApiResponse(code = 400, message = "Bad client request"),
@@ -36,7 +33,7 @@ public class TodoController {
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     }
     )
-    @RequestMapping(path = "/list",method = RequestMethod.GET)
+    @RequestMapping(path = "/todo/list",method = RequestMethod.GET)
     @PostMapping(
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE}
@@ -46,6 +43,8 @@ public class TodoController {
         List<Todo> todos = todoService.list();
         return ResponseEntity.ok().body(todos);
     }
+
+
 
 
 }

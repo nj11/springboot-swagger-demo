@@ -5,17 +5,24 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import static springfox.documentation.builders.PathSelectors.regex;
 
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig extends WebMvcConfigurationSupport {
+
     @Bean
     public Docket productApi() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -24,8 +31,9 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
                 .apis(RequestHandlerSelectors.basePackage("com.springboot.swagger.demo.controllers"))
                 .paths(regex("/v1/.*"))
                 .build()
-
-                .apiInfo(metaData());
+                .apiInfo(metaData())
+                .securitySchemes(Arrays.asList(apiKey()))
+                .securityContexts(Collections.singletonList(securityContext()));
     }
     private ApiInfo metaData() {
         return new ApiInfoBuilder()
@@ -33,7 +41,7 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
                 .description("\"REST API \"")
                 .version("1.0.0")
                 .license("Apache License Version 2.0")
-                .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0\"")
+                .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
                 .contact(new Contact("Test Contact", "http://test.com", "test@test.com"))
                 .build();
     }
@@ -45,4 +53,21 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
+
+
+    private ApiKey apiKey() {
+        return new ApiKey("Bearer", "Authorization", "header");
+    }
+
+    private List<SecurityReference> defaultAuth() {
+        final AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+        final AuthorizationScope[] authorizationScopes = new AuthorizationScope[]{authorizationScope};
+        return Collections.singletonList(new SecurityReference("Bearer", authorizationScopes));
+    }
+
+    private SecurityContext securityContext() {
+        return SecurityContext.builder().securityReferences(defaultAuth()).forPaths(PathSelectors.regex("/.*")).build();
+    }
+
+
 }
