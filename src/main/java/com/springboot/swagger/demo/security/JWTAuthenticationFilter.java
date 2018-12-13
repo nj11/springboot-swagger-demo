@@ -2,12 +2,15 @@ package com.springboot.swagger.demo.security;
 
 import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.springboot.swagger.demo.domain.ApplicationUser;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -46,7 +49,11 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                             creds.getPassword(),
                             new ArrayList<>())
             );
-        } catch (IOException e) {
+        }
+        catch(MismatchedInputException e){
+            throw new BadCredentialsException("Invalid request.Valid request is {\"username\":\"username\",\"password\":\"passwpord\"}");
+        }
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -63,6 +70,24 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .sign(HMAC512(SECRET.getBytes()));
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
+
+    }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+                                              AuthenticationException failed) throws IOException {
+
+        if(failed instanceof  BadCredentialsException){
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
+        else if(failed instanceof UsernameNotFoundException){
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        }
+        else
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+
+        response.getWriter().write(failed.getMessage());
+        response.flushBuffer();
 
     }
 }

@@ -2,6 +2,7 @@ package com.springboot.swagger.demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -11,6 +12,10 @@ import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
+import springfox.documentation.spring.web.scanners.ApiDescriptionReader;
+import springfox.documentation.spring.web.scanners.ApiListingScanner;
+import springfox.documentation.spring.web.scanners.ApiModelReader;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Arrays;
@@ -29,7 +34,7 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
                 .groupName("SpringBoot-Swagger-API")
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.springboot.swagger.demo.controllers"))
-                .paths(regex("/v1/.*"))
+                //.paths(regex("/v1/.*"))
                 .build()
                 .apiInfo(metaData())
                 .securitySchemes(Arrays.asList(apiKey()))
@@ -67,6 +72,13 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
 
     private SecurityContext securityContext() {
         return SecurityContext.builder().securityReferences(defaultAuth()).forPaths(PathSelectors.regex("/.*")).build();
+    }
+
+    //Document Login operation in boot.
+    @Primary
+    @Bean
+    public ApiListingScanner addExtraOperations(ApiDescriptionReader apiDescriptionReader, ApiModelReader apiModelReader, DocumentationPluginsManager pluginsManager){
+        return new LoginOperations(apiDescriptionReader, apiModelReader, pluginsManager);
     }
 
 
