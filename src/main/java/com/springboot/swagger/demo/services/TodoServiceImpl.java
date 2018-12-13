@@ -23,6 +23,7 @@ public class TodoServiceImpl implements TodoService {
     @Transactional
     public List<Todo> list()  {
         List<Todo> todos = todoRepository.findAll();
+        logger.info("Todos found :: "  + todos.size());
         return todos;
    }
 

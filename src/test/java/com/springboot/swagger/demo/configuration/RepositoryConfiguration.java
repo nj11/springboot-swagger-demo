@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableAutoConfiguration
-@EntityScan(basePackages = {"com.shorr.pricemanagement.api.domain"})
-@EnableJpaRepositories(basePackages = {"com.shorr.pricemanagement.api.repositories"})
+@EntityScan(basePackages = {"com.springboot.swagger.demo.domain"})
+@EnableJpaRepositories(basePackages = {"com.springboot.swagger.demo.repositories"})
 @EnableTransactionManagement
 public class RepositoryConfiguration {
 }
