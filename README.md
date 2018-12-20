@@ -1,4 +1,4 @@
-# Demo Application using REST,Spring Boot,JPA and Swagger.
+# Demo Application using REST,Spring Boot,JPA,OAuth/JWT and Swagger.
 
 ### Setup Spring Boot Rest App with JAX-RS
 
